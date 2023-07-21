@@ -1,5 +1,5 @@
-use rocket::serde::{Deserialize, json::Json};
-use std::{fs::OpenOptions, io::Write};
+use rocket::serde::{Deserialize, Serialize, json::Json};
+use std::{fs::OpenOptions, io::{Write, BufRead, BufReader}};
 
 #[macro_use] extern crate rocket;
 
@@ -8,7 +8,21 @@ fn index() -> &'static str {
     "Hello World!"
 }
 
-#[derive(Deserialize)]
+#[get("/readtasks")]
+fn read_tasks() -> Json<Vec<String>> {
+    let tasks = OpenOptions::new()
+        .read(true)
+        .append(true)
+        .create(true)
+        .open("tasks.txt")
+        .expect("unable to access tasks.txt");
+    let reader = BufReader::new(tasks);
+    Json(reader.lines()
+            .map(|line| line.expect("Could not read line"))
+            .collect())  
+}
+
+#[derive(Deserialize, Serialize)]
 #[serde(crate = "rocket::serde")]
 struct Task<'r> {
     item: &'r str,
@@ -30,5 +44,5 @@ fn add_task(task: Json<Task<'_>>) -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, add_task])
+    rocket::build().mount("/", routes![index, add_task, read_tasks])
 }
