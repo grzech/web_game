@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"command": "trunk serve --open",
+			"problemMatcher": [
+				"$rustc"
+			],
+			"label": "Run"
+		}
+	]
+}
