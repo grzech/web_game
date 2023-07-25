@@ -8,6 +8,15 @@
 				"$rustc"
 			],
 			"label": "Run"
+		},
+		{
+			"type": "cargo",
+			"command": "build",
+			"problemMatcher": [
+				"$rustc"
+			],
+			"group": "build",
+			"label": "Build debug"
 		}
 	]
 }
