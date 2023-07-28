@@ -1,34 +1,60 @@
 use leptos::*;
 
+#[derive(PartialEq, std::fmt::Debug)]
+enum Game {
+    None,
+    Snake,
+    PingPong,
+}
+
+static mut SELECTED_GAME: Game = Game::None;
+
 fn main() {
     mount_to_body(|cx| view!{ cx, <App/>> })
 }
 
 #[component]
 fn App(cx: Scope) -> impl IntoView {
-    let (count, set_count) = create_signal(cx, 0);
-    let (value, set_value) = create_signal(cx, String::from(""));
-
-    let clear = move |_ev| set_count.set(0);
-    let decrement = move |_ev| set_count.update(|count| *count -= 1);
-    let increment = move |_ev| set_count.update(|count| *count += 1);
-    let enter_txt = move |ev| {
-        let txt = event_target_value(&ev);
-        if let Ok(data) = txt.parse::<i32>() {
-            set_value.set(txt);
-            log!("Entered text: \"{}\"", value.get());
-            set_count.set(data);
-        }
-    };
-    
+    unsafe{log!("App: Game = {:?}", SELECTED_GAME);};
     view! {
         cx,
-        <div>
-            <button on:click=clear>"Clear"</button>
-            <button on:click=decrement>"-1"</button>
-            <span>"Value: " {move || count.get().to_string()} "!"</span>
-            <button on:click=increment>"+1"</button>
-            <input type="text" on:input=enter_txt></input>
+        <div align="center">
+            <Show
+                when= move || { unsafe{ SELECTED_GAME == Game::None } }
+                fallback=|cx| view! { cx, <Player/> }
+            >
+                <MainMenu/>
+            </Show>
+        </div>
+    }
+    
+}
+
+
+#[component]
+fn MainMenu(cx: Scope) -> impl IntoView {
+    let snake = move |_ev| unsafe { SELECTED_GAME = Game::Snake; };
+    let ping_pong = move |_ev| unsafe { SELECTED_GAME = Game::PingPong; };
+    unsafe{log!("MainMenu: Game = {:?}", SELECTED_GAME);};
+    view! {
+        cx,
+        <div align="center">
+            <h1>"Select the game"</h1>
+            <h4><button on:click=snake>"Snake"</button></h4>
+            <h4><button on:click=ping_pong>"Ping-Pong"</button></h4>
+        </div>
+    }
+
+}
+
+#[component]
+fn Player(cx: Scope) -> impl IntoView {
+    unsafe{log!("Player: Game = {:?}", SELECTED_GAME);};
+    view! {
+        cx,
+        <div align="center">
+            <h1>"Give your name"</h1>
+            <h4><input type="text"></input></h4>
         </div>
     }
 }
