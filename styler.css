@@ -1,0 +1,43 @@
+body {
+    background: #000000;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    color: #a5a5a5;
+  }
+
+button {
+    background: #818181;
+    height: 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    color: #000000;
+}
+
+input {
+    background: #818181;
+    height: 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    color: #000000;
+}
+
+h4 {
+    background: #000000;
+    height: 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    color: #a5a5a5;
+}
