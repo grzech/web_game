@@ -16,7 +16,7 @@ fn App(cx: Scope) -> impl IntoView {
             <h3><button on:click=start_game>"Start"</button></h3>
             <Show
                 when= move || { game_started.get() }
-                fallback=|cx| view! { cx, <> }
+                fallback=|_cx| view! { cx, <> }
             >
                 <Game/>
             </Show>
@@ -29,15 +29,13 @@ fn App(cx: Scope) -> impl IntoView {
 fn Game(cx: Scope) -> impl IntoView {
     view! {
         cx,
-        <div align="center">
-            <h2>"#####################<br>
-            #                   #<br>
-            #                   #<br>
-            #                   #<br>
-            #                   #<br>
-            #                   #<br>
-            #                   #<br>
-            #####################<br>"</h2>
+        <div class="boardrow">
+            <div class="cell snakebody"></div>
+            <div class="cell"> </div>
+            <div class="cell snakehead"></div>
+            <div class="cell snakebody"></div>
+            <div class="cell food"></div>
+            <div> "Game board here" </div>
         </div>
     }
 }

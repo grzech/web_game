@@ -11,7 +11,8 @@ body {
 
 button {
     background: #818181;
-    height: 3vh;
+    height: 40px;
+    width: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -22,13 +23,14 @@ button {
 
 input {
     background: #818181;
-    height: 3vh;
+    height: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: auto;
     color: #000000;
+    font-size: 30px;
 }
 
 h4 {
@@ -40,4 +42,29 @@ h4 {
     align-items: center;
     margin: auto;
     color: #a5a5a5;
+}
+
+.boardrow {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+}
+
+.cell {
+  width:30px;
+  height:30px;
+  border-radius: 7.5px;
+  background: #3b3b3b;
+}
+
+.snakebody {
+  background: #ff00ff;
+}
+
+.snakehead {
+  background: #8000ff;
+}
+
+.food {
+  background: #ff0080;
 }
