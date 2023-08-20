@@ -29,13 +29,28 @@ fn App(cx: Scope) -> impl IntoView {
 fn Game(cx: Scope) -> impl IntoView {
     view! {
         cx,
-        <div class="boardrow">
-            <div class="cell snakebody"></div>
-            <div class="cell"> </div>
-            <div class="cell snakehead"></div>
-            <div class="cell snakebody"></div>
-            <div class="cell food"></div>
-            <div> "Game board here" </div>
+        <div id="gameboard">
+            <div class="boardrow">
+                <div class="cell"></div>
+                <div class="cell"> </div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+            <div class="boardrow">
+                <div class="cell snakebody"></div>
+                <div class="cell"> </div>
+                <div class="cell snakehead"></div>
+                <div class="cell snakebody"></div>
+                <div class="cell food"></div>
+            </div>
+            <div class="boardrow">
+                <div class="cell"></div>
+                <div class="cell"> </div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
         </div>
     }
 }

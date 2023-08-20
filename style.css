@@ -44,6 +44,12 @@ h4 {
     color: #a5a5a5;
 }
 
+#gameboard {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .boardrow {
   display: flex;
   flex-direction: row;
@@ -53,7 +59,7 @@ h4 {
 .cell {
   width:30px;
   height:30px;
-  border-radius: 7.5px;
+  border-radius: 6.5px;
   background: #3b3b3b;
 }
 
