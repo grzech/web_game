@@ -90,3 +90,24 @@ pub fn Board<'a>(cx: Scope, board: &'a GameBoard) -> impl IntoView {
         </div>
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn check_put_and_get_token() {
+        let mut brd = GameBoard::new((5, 5));
+        let test_data = [
+            ((1,1), SnakeFields::Body),
+            ((2,2), SnakeFields::Body),
+            ((2,1), SnakeFields::Head),
+            ((2,3), SnakeFields::Food)];
+        for (coordinates, token) in test_data {
+            assert_eq!(brd.get_token(coordinates), Ok(SnakeFields::Empty));
+            brd.put_token(coordinates, token).unwrap();
+            assert_eq!(brd.get_token(coordinates), Ok(token));
+        } 
+    }
+}

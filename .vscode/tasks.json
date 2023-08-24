@@ -18,5 +18,15 @@
 			"group": "build",
 			"label": "Build debug"
 		}
+		,
+		{
+			"type": "shell",
+			"command": "cargo test --target=x86_64-unknown-linux-gnu",
+			"problemMatcher": [
+				"$rustc"
+			],
+			"group": "test",
+			"label": "Unittests"
+		}
 	]
 }
