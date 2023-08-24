@@ -1,6 +1,6 @@
 use leptos::*;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum SnakeFields {
     Head,
     Food,
@@ -28,6 +28,14 @@ impl GameBoard {
 
     fn get_rows(&self) -> &[BoardRow] {
         &self.0[..]
+    }
+
+    pub fn put_token(&mut self, (x, y) : (usize, usize), token: SnakeFields) {
+        self.0[y].0[x] = token;
+    }
+
+    pub fn get_token(&self, (x, y) : (usize, usize)) -> SnakeFields {
+        self.0[y].0[x]
     }
 }
 
