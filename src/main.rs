@@ -37,13 +37,13 @@ fn Game(cx: Scope) -> impl IntoView {
         ((2,1), SnakeFields::Head),
         ((2,3), SnakeFields::Food)];
     for (coordinates, token) in test_data {
-        assert_eq!(brd.get_token(coordinates), SnakeFields::Empty);
-        brd.put_token(coordinates, token);
-        assert_eq!(brd.get_token(coordinates), token);
+        assert_eq!(brd.get_token(coordinates), Ok(SnakeFields::Empty));
+        brd.put_token(coordinates, token).unwrap();
+        assert_eq!(brd.get_token(coordinates), Ok(token));
     }
-    brd.put_token((1,1), SnakeFields::Body);
-    brd.put_token((10,10), SnakeFields::Head);
-    brd.put_token((10,11), SnakeFields::Food);
+    brd.put_token((1,1), SnakeFields::Body).unwrap();
+    brd.put_token((10,10), SnakeFields::Head).unwrap();
+    brd.put_token((10,11), SnakeFields::Food).unwrap();
     view! {
         cx,
         <Board board=&brd/>

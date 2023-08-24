@@ -18,24 +18,38 @@ impl std::ops::Deref for BoardRow {
     }
 }
 
-pub struct GameBoard (Vec<BoardRow>);
+pub struct GameBoard {
+    rows: Vec<BoardRow>,
+    height: usize,
+    width: usize,
+}
 
 impl GameBoard {
     pub fn new((rows, cols): (usize, usize)) -> GameBoard {
         let row = BoardRow(vec![SnakeFields::Empty; cols]);
-        GameBoard(vec![row; rows])
+        GameBoard{rows: vec![row; rows], height: rows, width: cols}
     }
 
     fn get_rows(&self) -> &[BoardRow] {
-        &self.0[..]
+        &self.rows[..]
     }
 
-    pub fn put_token(&mut self, (x, y) : (usize, usize), token: SnakeFields) {
-        self.0[y].0[x] = token;
+    pub fn put_token(&mut self, (x, y) : (usize, usize), token: SnakeFields) -> Result<(), ()> {
+        self.check_boundaries(x, y)?;
+        self.rows[y].0[x] = token;
+        Ok(())
     }
 
-    pub fn get_token(&self, (x, y) : (usize, usize)) -> SnakeFields {
-        self.0[y].0[x]
+    pub fn get_token(&self, (x, y) : (usize, usize)) -> Result<SnakeFields, ()> {
+        self.check_boundaries(x, y)?;
+        Ok(self.rows[y].0[x])
+    }
+
+    fn check_boundaries(&self, x : usize, y : usize) -> Result<(), ()> {
+        if x >= self.width || y >= self.height {
+            return Err(());
+        }
+        Ok(())
     }
 }
 
