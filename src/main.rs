@@ -1,7 +1,7 @@
 use leptos::*;
 mod game_board;
 
-use game_board::{Row, SnakeFields};
+use game_board::{GameBoard, Board};
 
 fn main() {
     mount_to_body(|cx| view!{ cx, <App/> })
@@ -30,24 +30,9 @@ fn App(cx: Scope) -> impl IntoView {
 
 #[component]
 fn Game(cx: Scope) -> impl IntoView {
+    let brd = GameBoard::new((20, 16));
     view! {
         cx,
-        <div id="gameboard">
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Food, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Head, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Body, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Body, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Body, SnakeFields::Body, SnakeFields::Body, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Body, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Body, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Body, SnakeFields::Body, SnakeFields::Body, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Body, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Body, SnakeFields::Body, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-            {view! { cx, <Row cells=&[SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty, SnakeFields::Empty]/> }}
-        </div>
+        <Board board=&brd/>
     }
 }

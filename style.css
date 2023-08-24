@@ -45,6 +45,7 @@ h4 {
 }
 
 #gameboard {
+  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 3px;
