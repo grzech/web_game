@@ -2,6 +2,7 @@ use leptos::*;
 mod game_board;
 
 use game_board::{GameBoard, Board, SnakeFields};
+use std::time::Duration;
 
 fn main() {
     mount_to_body(|cx| view!{ cx, <App/> })
@@ -30,13 +31,12 @@ fn App(cx: Scope) -> impl IntoView {
 
 #[component]
 fn Game(cx: Scope) -> impl IntoView {
-    let mut brd = GameBoard::new((20, 16));
-
-    brd.put_token((1,1), SnakeFields::Body).unwrap();
-    brd.put_token((10,10), SnakeFields::Head).unwrap();
-    brd.put_token((10,11), SnakeFields::Food).unwrap();
+    let mut brd = GameBoard::new((20, 20));
+    let (x, set_x) = create_signal(cx, 0usize);
+    set_interval(move || {set_x.set(x.get()+1);}, Duration::new(1, 0));
     view! {
         cx,
-        <Board board=&brd/>
+        <Board board=&mut brd/>
+        <h4>{move || format!("Current value is {}", x.get())}</h4>
     }
 }
