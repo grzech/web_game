@@ -9,7 +9,7 @@ pub enum SnakeFields {
 }
 
 #[derive(Clone)]
-struct BoardRow (Vec<SnakeFields>);
+pub struct BoardRow (Vec<SnakeFields>);
 
 impl std::ops::Deref for BoardRow {
     type Target = [SnakeFields];
@@ -18,6 +18,7 @@ impl std::ops::Deref for BoardRow {
     }
 }
 
+#[derive(Clone)]
 pub struct GameBoard {
     rows: Vec<BoardRow>,
     height: usize,
@@ -30,7 +31,7 @@ impl GameBoard {
         GameBoard{rows: vec![row; rows], height: rows, width: cols}
     }
 
-    fn get_rows(&self) -> &[BoardRow] {
+    pub fn get_rows(&self) -> &[BoardRow] {
         &self.rows[..]
     }
 
