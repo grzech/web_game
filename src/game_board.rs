@@ -31,7 +31,7 @@ impl GameBoard {
         GameBoard{rows: vec![row; rows], height: rows, width: cols}
     }
 
-    pub fn get_rows(&self) -> &[BoardRow] {
+    fn get_rows(&self) -> &[BoardRow] {
         &self.rows[..]
     }
 
@@ -55,7 +55,7 @@ impl GameBoard {
 }
 
 #[component]
-pub fn Cell(cx: Scope, state: SnakeFields) -> impl IntoView {
+fn Cell(cx: Scope, state: SnakeFields) -> impl IntoView {
     let cell_type = match state {
         SnakeFields::Head => "snakehead",
         SnakeFields::Food => "food",
@@ -69,7 +69,7 @@ pub fn Cell(cx: Scope, state: SnakeFields) -> impl IntoView {
 }
 
 #[component]
-pub fn Row<'a>(cx: Scope, cells: &'a [SnakeFields]) -> impl IntoView {
+fn Row<'a>(cx: Scope, cells: &'a [SnakeFields]) -> impl IntoView {
     view! {
         cx,
         <div class="boardrow">
