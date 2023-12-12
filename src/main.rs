@@ -1,8 +1,10 @@
 use leptos::*;
 mod game_board;
+mod snake;
 
 use game_board::{GameBoard, Board, SnakeFields};
 use std::time::Duration;
+use snake::Snake;
 
 fn main() {
     mount_to_body(|cx| view!{ cx, <App/> })
@@ -33,7 +35,7 @@ fn App(cx: Scope) -> impl IntoView {
 fn Game(cx: Scope) -> impl IntoView {
     let (brd, set_brd) = create_signal(cx, GameBoard::new((20, 20)));
     let (x, set_x) = create_signal(cx, 0usize);
-    set_interval(move || {set_x.set(x.get()+1); set_brd.update(|b| b.put_token((x.get(), 0), SnakeFields::Body).unwrap()); }, Duration::new(1, 0));
+    set_interval(move || {set_x.set(x.get()+1); Snake(set_brd); }, Duration::new(1, 0));
     view! {
         cx,
         {move ||  { view! { cx, <Board board=&brd.get()/> } } }
