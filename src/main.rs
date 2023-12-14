@@ -31,14 +31,23 @@ fn App(cx: Scope) -> impl IntoView {
     
 }
 
+fn handle_keyboard_input(ev: ev::KeyboardEvent, log: WriteSignal<String>)
+{
+    log.set(format!("Key received = {:?}({:?})", ev.char_code(), ev.code()));
+}
+
 #[component]
 fn Game(cx: Scope) -> impl IntoView {
     let (brd, set_brd) = create_signal(cx, GameBoard::new((20, 20)));
     let (x, set_x) = create_signal(cx, 0usize);
+    let (log, set_log) = create_signal(cx, String::default());
+    window_event_listener(ev::keydown, move |ev| {
+        handle_keyboard_input(ev, set_log)
+    } );
     set_interval(move || {set_x.set(x.get()+1); Snake(set_brd); }, Duration::new(1, 0));
     view! {
         cx,
         {move ||  { view! { cx, <Board board=&brd.get()/> } } }
-        <h4>{move || format!("Current value is {}", x.get())}</h4>
+        <h4>{move || format!("{}", log.get()) }</h4>
     }
 }
