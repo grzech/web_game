@@ -5,6 +5,7 @@ mod snake;
 use game_board::{GameBoard, Board, SnakeFields};
 use std::time::Duration;
 use snake::Snake;
+use std::sync::{Arc, Mutex};
 
 fn main() {
     mount_to_body(|cx| view!{ cx, <App/> })
@@ -31,23 +32,20 @@ fn App(cx: Scope) -> impl IntoView {
     
 }
 
-fn handle_keyboard_input(ev: ev::KeyboardEvent, log: WriteSignal<String>)
-{
-    log.set(format!("Key received = {:?}({:?})", ev.char_code(), ev.code()));
-}
-
 #[component]
 fn Game(cx: Scope) -> impl IntoView {
     let (brd, set_brd) = create_signal(cx, GameBoard::new((20, 20)));
     let (x, set_x) = create_signal(cx, 0usize);
-    let (log, set_log) = create_signal(cx, String::default());
+    let (key, set_key) = create_signal(cx, String::default());
+    let game = Arc::new(Mutex::new(Snake::new(20, 20)));
+
     window_event_listener(ev::keydown, move |ev| {
-        handle_keyboard_input(ev, set_log)
+        set_key.set(ev.key());
     } );
-    set_interval(move || {set_x.set(x.get()+1); Snake(set_brd); }, Duration::new(1, 0));
+    
+    set_interval(move || {set_x.set(x.get()+1); game.lock().unwrap().play(set_brd, key.get()); }, Duration::new(1, 0));
     view! {
         cx,
         {move ||  { view! { cx, <Board board=&brd.get()/> } } }
-        <h4>{move || format!("{}", log.get()) }</h4>
     }
 }
