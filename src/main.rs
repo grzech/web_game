@@ -2,7 +2,7 @@ use leptos::*;
 mod game_board;
 mod snake;
 
-use game_board::{GameBoard, Board, SnakeFields};
+use game_board::{GameBoard, Board};
 use std::time::Duration;
 use snake::Snake;
 use std::sync::{Arc, Mutex};
@@ -43,7 +43,11 @@ fn Game(cx: Scope) -> impl IntoView {
         set_key.set(ev.key());
     } );
     
-    set_interval(move || {set_x.set(x.get()+1); game.lock().unwrap().play(set_brd, key.get()); }, Duration::new(1, 0));
+    set_interval(move || {
+            set_x.set(x.get()+1);
+            game.lock().unwrap().play(set_brd, key.get());
+        }, Duration::new(1, 0));
+
     view! {
         cx,
         {move ||  { view! { cx, <Board board=&brd.get()/> } } }
