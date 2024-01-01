@@ -70,13 +70,47 @@ impl Snake {
         Ok(())
     }
 
-    pub fn play(&mut self, board: WriteSignal<GameBoard>, key: String) {
-        board.update(|b| {
-            let new_head = self.get_next_head_position(key);
-            if let Ok(old_head) = b.get_token(new_head) {
-                self.move_head(new_head, old_head, b).unwrap();
-                log!("Current head position: {:?}", self.head());
-            }
-        });
+    pub fn play(&mut self, board: &mut GameBoard, key: String) {
+        let new_head = self.get_next_head_position(key);
+        if let Ok(old_head) = board.get_token(new_head) {
+            self.move_head(new_head, old_head, board).unwrap();
+            log!("Current head position: {:?}", self.head());
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn constructor_should_create_snake_with_head_only() {
+        let x = 3;
+        let y = 100;
+        let snake = Snake::new(x, y);
+        assert_eq!(vec![(x/2, y/2)], snake.snake);
+    }
+
+    #[test]
+    fn play_should_move_head_in_correct_direction() {
+        let dimensions = (10, 10);
+        let mut brd = GameBoard::new(dimensions);
+        let mut snake = Snake::new(dimensions.0, dimensions.1);
+        let moves = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
+        let positions = [(5, 4), (6, 4), (6, 5), (5, 5)];
+        for (input, expected) in moves.iter().zip(positions.iter()) {
+            snake.play(&mut brd, input.to_string());
+            assert_eq!(snake.snake, vec![*expected]);
+        }
+    }
+
+    #[test]
+    fn play_should_print_snake_on_board() {
+        let dimensions = (10, 10);
+        let mut brd = GameBoard::new(dimensions);
+        let mut snake = Snake::new(dimensions.0, dimensions.1);
+        
+        snake.play(&mut brd, String::new());
+        assert_eq!(brd.get_token((dimensions.0/2, dimensions.1/2)), Ok(SnakeFields::Head));
     }
 }
