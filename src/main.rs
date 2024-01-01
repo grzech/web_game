@@ -35,7 +35,6 @@ fn App(cx: Scope) -> impl IntoView {
 #[component]
 fn Game(cx: Scope) -> impl IntoView {
     let (brd, set_brd) = create_signal(cx, GameBoard::new((20, 20)));
-    let (x, set_x) = create_signal(cx, 0usize);
     let (key, set_key) = create_signal(cx, String::default());
     let game = Arc::new(Mutex::new(Snake::new(20, 20)));
 
@@ -44,8 +43,10 @@ fn Game(cx: Scope) -> impl IntoView {
     } );
     
     set_interval(move || {
-            set_x.set(x.get()+1);
-            game.lock().unwrap().play(set_brd, key.get());
+            set_brd.update( |b| {
+                    game.lock().unwrap().play(b, key.get());
+                }    
+            );
         }, Duration::new(1, 0));
 
     view! {
