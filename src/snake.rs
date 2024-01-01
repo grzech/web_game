@@ -113,4 +113,28 @@ mod tests {
         snake.play(&mut brd, String::new());
         assert_eq!(brd.get_token((dimensions.0/2, dimensions.1/2)), Ok(SnakeFields::Head));
     }
+
+    #[test]
+    fn head_should_return_last_element_of_snake_body() {
+        let dimensions = (10, 10);
+        let mut snake = Snake::new(dimensions.0, dimensions.1);
+        let heads = [(0, 0), (1, 0), (dimensions.0-1, 0), (6, 4), (1, dimensions.1-1)];
+        
+        for head in heads {
+            snake.snake.push(head);
+            assert_eq!(snake.head(), head);
+        }
+    }
+
+    #[test]
+    fn get_next_head_position_should_increment_head_properly() {
+        let x = 5;
+        let y = 5;
+        let mut snake = Snake::new(x*2, y*2);
+        let moves = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
+        let positions = [(x, y-1), (x+1, y), (x, y+1), (x-1, y)];
+        for (input, expected) in moves.iter().zip(positions.iter()) {
+            assert_eq!(snake.get_next_head_position(input.to_string()), *expected);
+        }
+    }
 }
