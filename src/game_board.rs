@@ -111,4 +111,23 @@ mod tests {
             assert_eq!(brd.get_token(coordinates), Ok(token));
         } 
     }
+
+    #[test]
+    fn put_token_should_return_error_if_boundaries_are_exceeded() {
+        let max_x = 5;
+        let max_y = 6;
+        let mut brd = GameBoard::new((max_x, max_y));
+        assert_eq!(Err(()), brd.put_token((max_x, max_y-1), SnakeFields::Body));
+        assert_eq!(Err(()), brd.put_token((max_x-1, max_y), SnakeFields::Body));
+    }
+
+    #[test]
+    fn get_token_should_return_error_if_boundaries_are_exceeded() {
+        let max_x = 5;
+        let max_y = 6;
+        let mut brd = GameBoard::new((max_x, max_y));
+        assert_eq!(Err(()), brd.get_token((max_x-1, max_y)));
+        assert_eq!(Err(()), brd.get_token((max_x, max_y-1)));
+    }
+
 }
