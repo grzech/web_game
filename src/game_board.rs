@@ -52,6 +52,10 @@ impl GameBoard {
         }
         Ok(())
     }
+
+    pub fn get_boundaries(&self) -> (usize, usize) {
+        (self.width, self.height)
+    }
 }
 
 #[component]

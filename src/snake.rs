@@ -1,10 +1,11 @@
-use leptos::*;
 use crate::game_board::{GameBoard, SnakeFields};
+use rand::Rng;
 
 pub struct Snake {
     snake: Vec<(usize, usize)>,
     max_rows: usize,
     max_cols: usize,
+    food_needed: bool,
 }
 
 impl Snake {
@@ -12,7 +13,8 @@ impl Snake {
         Snake {
             snake: vec![(rows/2, cols/2)],
             max_cols: cols,
-            max_rows: rows
+            max_rows: rows,
+            food_needed: true,
         }
     }
 
@@ -74,14 +76,46 @@ impl Snake {
         let new_head = self.get_next_head_position(key);
         if let Ok(old_head) = board.get_token(new_head) {
             self.move_head(new_head, old_head, board).unwrap();
-            log!("Current head position: {:?}", self.head());
+            if self.food_needed {
+                //self.put_food(board);
+                self.food_needed = false;
+            }
         }
+    }
+
+    pub fn put_food(&self, brd: &mut GameBoard) {
+        let mut rng = rand::thread_rng();
+        loop {
+            let x = rng.gen_range(0..self.max_cols);
+            let y = rng.gen_range(0..self.max_rows);
+            if brd.get_token((x, y)) == Ok(SnakeFields::Empty) {
+                brd.put_token((x, y), SnakeFields::Food).unwrap();
+                break;
+            }
+        }
+        
+
+
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn get_all_fields_with_token(b : &GameBoard, expected: SnakeFields) -> Vec<(usize, usize)>
+    {
+        let mut ret = vec![];
+        let (max_x, max_y) = b.get_boundaries();
+        for row in 0..max_y {
+            for col in 0..max_x {
+                if b.get_token((col, row)) == Ok(expected) {
+                    ret.push((col, row));
+                }
+            }
+        }
+        ret
+    }
 
     #[test]
     fn constructor_should_create_snake_with_head_only() {
@@ -136,5 +170,48 @@ mod tests {
         for (input, expected) in moves.iter().zip(positions.iter()) {
             assert_eq!(snake.get_next_head_position(input.to_string()), *expected);
         }
+    }
+
+    #[test]
+    fn first_move_should_place_head_on_board() {
+        let dimensions = (10, 10);
+        let mut brd = GameBoard::new(dimensions);
+        let mut snake = Snake::new(dimensions.0, dimensions.1);
+        snake.play(&mut brd, String::default());
+        assert_eq!(get_all_fields_with_token(&brd, SnakeFields::Head).len(), 1);
+    }
+
+    #[test]
+    fn first_move_should_place_food_on_board() {
+        let dimensions = (10, 10);
+        let mut brd = GameBoard::new(dimensions);
+        let mut snake = Snake::new(dimensions.0, dimensions.1);
+        snake.play(&mut brd, String::default());
+        assert_eq!(get_all_fields_with_token(&brd, SnakeFields::Food).len(), 1);
+    }
+
+    #[test]
+    fn afted_first_move_snake_should_have_no_body() {
+        let dimensions = (10, 10);
+        let mut brd = GameBoard::new(dimensions);
+        let mut snake = Snake::new(dimensions.0, dimensions.1);
+        snake.play(&mut brd, String::default());
+        assert_eq!(get_all_fields_with_token(&brd, SnakeFields::Body).len(), 0);
+    }
+
+    #[test]
+    fn put_food_should_place_food_in_random_empty_field() {
+        let mut head_positions = vec![];
+        let dimensions = (10, 10);
+        let snake = Snake::new(dimensions.0, dimensions.1);
+        for _ in 0..5 {
+            let mut brd = GameBoard::new(dimensions);
+            snake.put_food(&mut brd);
+            let food = get_all_fields_with_token(&brd, SnakeFields::Food)[0];
+            if !head_positions.contains(&food) {
+                head_positions.push(food);
+            }
+        }
+        assert!(head_positions.len() > 1);
     }
 }
